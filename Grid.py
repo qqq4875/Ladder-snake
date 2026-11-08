@@ -1,8 +1,8 @@
 import pygame, SimpleText, sys
 
 class Grid:
-    def __init__(self, display, grid_size=60, starting_point=(0, 0)):
-        self.display = display
+    def __init__(self, surface, grid_size=60, starting_point=(0, 0)):
+        self.surface = surface
         self.grid_size = grid_size
         self.left_margin = starting_point[0]
         self.top_margin = starting_point[1]
@@ -23,20 +23,20 @@ class Grid:
         for y in range(9, -1, -1):
             if order == 1:
                 for x in range(0, 10, order):
-                    Grid_num = SimpleText.SimpleText(self.display, [x*self.grid_size + self.left_margin + width, y*self.grid_size + self.top_margin + width], str(Grid_counter), num_color, num_size)
+                    Grid_num = SimpleText.SimpleText(self.surface, [x*self.grid_size + self.left_margin + width, y*self.grid_size + self.top_margin + width], str(Grid_counter), num_color, num_size)
                     rect = pygame.Rect(x*self.grid_size + self.left_margin, y*self.grid_size + self.top_margin, self.grid_size, self.grid_size)
 
-                    pygame.draw.rect(self.display, grid_color, rect, width)
+                    pygame.draw.rect(self.surface, grid_color, rect, width)
                     Grid_num.draw()
 
                     Grid_counter += 1
             
             else:
                 for x in range(9, -1, order):
-                    Grid_num = SimpleText.SimpleText(self.display, [x*self.grid_size + self.left_margin + width, y*self.grid_size + self.top_margin + width], str(Grid_counter), num_color, num_size)
+                    Grid_num = SimpleText.SimpleText(self.surface, [x*self.grid_size + self.left_margin + width, y*self.grid_size + self.top_margin + width], str(Grid_counter), num_color, num_size)
                     rect = pygame.Rect(x*self.grid_size + self.left_margin, y*self.grid_size + self.top_margin, self.grid_size, self.grid_size)
                 
-                    pygame.draw.rect(self.display, grid_color, rect, width)
+                    pygame.draw.rect(self.surface, grid_color, rect, width)
                     Grid_num.draw()
 
                     Grid_counter += 1
@@ -86,7 +86,11 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode((Screen_Width, Screen_Height))
     clock = pygame.time.Clock()
 
-    grid = Grid(screen, 60, (0, 50))
+    grid_hold = pygame.Surface((600, 650))
+
+    grid = Grid(grid_hold, 60, (0, 50))
+    grid.drawGrid()
+
 
     #InGame
     while True:
@@ -98,11 +102,13 @@ if __name__ == "__main__":
         screen.fill((0, 0, 0))
         
         # Drawing grid.
-        grid.drawGrid(1, [255, 255, 255], [255, 255, 255])
+        screen.blit(grid_hold, (0, 0))
         block = pygame.Rect(grid.X_pos(77) - 2.5, grid.Y_pos(77) - 2.5, 5, 5)
 
         pygame.draw.circle(screen, [255, 255, 255], [grid.X_pos(60), grid.Y_pos(60)], 9)
         pygame.draw.rect(screen, [255, 255, 255], block)
+
+        print(clock.get_fps())
         
 
         pygame.display.update()
