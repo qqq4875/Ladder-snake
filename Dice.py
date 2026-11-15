@@ -22,14 +22,14 @@ class Dice:
         self.display = display
         self.dice_pos = dice_position
         self.dice_size = dice_size
-        self.dice_1 = scale(image_dice_1, self.dice_size)
-        self.dice_2 = scale(image_dice_2, self.dice_size)
-        self.dice_3 = scale(image_dice_3, self.dice_size)
-        self.dice_4 = scale(image_dice_4, self.dice_size)
-        self.dice_5 = scale(image_dice_5, self.dice_size)
-        self.dice_6 = scale(image_dice_6, self.dice_size)
-        self.dice_rolling = scale(image_dice_rolling, self.dice_size)
-        self.dice_image = self.dice_1 # For further changes.
+        self.dice = [scale(image_dice_1, self.dice_size),
+                     scale(image_dice_2, self.dice_size),
+                     scale(image_dice_3, self.dice_size),
+                     scale(image_dice_4, self.dice_size),
+                     scale(image_dice_5, self.dice_size),
+                     scale(image_dice_6, self.dice_size),
+                     scale(image_dice_rolling, self.dice_size)]
+        self.dice_image = self.dice[0] # For further changes.
         self.rolling = False
         self.step = 0
         self.dice_rolled = True
@@ -57,44 +57,21 @@ class Dice:
         self.update_dice_image_index()
 
         # Rolling.
-        if self.rolling and self.dice_image == self.dice_rolling and self.dice_image_index == 1:
+        if self.rolling and self.dice_image == self.dice[6] and self.dice_image_index == 1:
             self.amount_rolled_each_turn -= 1
         
         # Last roll to determine the step.
         if self.amount_rolled_each_turn == 0:
 
-            if self.dice_num == 1:
-                self.dice_image = self.dice_1
-            elif self.dice_num == 2:
-                self.dice_image = self.dice_2
-            elif self.dice_num == 3:
-                self.dice_image = self.dice_3
-            elif self.dice_num == 4:
-                self.dice_image = self.dice_4
-            elif self.dice_num == 5:
-                self.dice_image = self.dice_5
-            elif self.dice_num == 6:
-                self.dice_image = self.dice_6
-
+            self.dice_image = self.dice[self.dice_num - 1]
             self.rolling = False
 
         # In between rolling.
         if self.rolling and self.dice_image_index == 1 and self.amount_rolled_each_turn > 0 and self.dice_num != 0:
-            if self.dice_num == 1:
-                self.dice_image = self.dice_1
-            elif self.dice_num == 2:
-                self.dice_image = self.dice_2
-            elif self.dice_num == 3:
-                self.dice_image = self.dice_3
-            elif self.dice_num == 4:
-                self.dice_image = self.dice_4
-            elif self.dice_num == 5:
-                self.dice_image = self.dice_5
-            elif self.dice_num == 6:
-                self.dice_image = self.dice_6
+            self.dice_image = self.dice[self.dice_num - 1]
 
         elif self.rolling and self.dice_image_index == 0:
-            self.dice_image = self.dice_rolling
+            self.dice_image = self.dice[6]
             self.dice_num = random.randint(1, 6)
 
 
