@@ -1,13 +1,16 @@
-import pygame, random, Grid, sys, math
+import pygame, random, Grid, sys, math, pathlib
+
+BASE = pathlib.Path(__file__).parent
 
 class Obstacle:
     def __init__(self, display, grid, ladder, snake, hole, slippyfloor):
+
         self.display = display
         self.grid = grid
-        self.ladder = pygame.image.load(ladder).convert_alpha()
-        self.snake = pygame.image.load(snake).convert_alpha()
-        self.hole = pygame.image.load(hole).convert_alpha()
-        self.slippyfloor = pygame.image.load(slippyfloor).convert_alpha()
+        self.ladder = pygame.image.load(BASE / ladder).convert_alpha()
+        self.snake = pygame.image.load(BASE / snake).convert_alpha()
+        self.hole = pygame.image.load(BASE / hole).convert_alpha()
+        self.slippyfloor = pygame.image.load(BASE / slippyfloor).convert_alpha()
 
         self.ladder_pos = {} # Contain integer grid number for each ladder's end as key: value pair (bottom_end: top_end).
         self.snake_pos = {} # Contain integer grid number for each snake's end as key: value pair (head: tail).
@@ -208,6 +211,7 @@ class Obstacle:
 
 # Test.
 if __name__ == "__main__":
+
     pygame.init()
     
     screen = pygame.display.set_mode((630, 630))
@@ -220,10 +224,10 @@ if __name__ == "__main__":
 
     obstacle = Obstacle(screen,
                         grid,
-                        "Pygame_101/ladder.png",
-                        "Pygame_101/snake.png",
-                        "Pygame_101/hole.png",
-                        "Pygame_101/ice.jpg")
+                        "ladder.png",
+                        "snake.png",
+                        "hole.png",
+                        "ice.jpg")
 
     obstacle.Ladder(4)
     obstacle.Snake(5)

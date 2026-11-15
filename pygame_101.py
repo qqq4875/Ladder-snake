@@ -1,6 +1,6 @@
-import pygame, sys, random, Grid, Obstacle, Dice, Action, SimpleText
+import pygame, sys, random, Grid, Obstacle, Dice, Action, SimpleText, pathlib
 
-
+BASE = pathlib.Path(__file__).parent
 
 def draw_button(screen, text, x, y, w, h, color, hover_color, text_size=30):
     mouse_pos = pygame.mouse.get_pos()
@@ -86,31 +86,31 @@ grid.drawGrid()
 
 obstacle = Obstacle.Obstacle(screen,
                     grid,
-                    "Pygame_101/ladder.png",
-                    "Pygame_101/snake.png",
-                    "Pygame_101/hole.png",
-                    "Pygame_101/ice.jpg")
+                    "ladder.png",
+                    "snake.png",
+                    "hole.png",
+                    "ice.jpg")
 
 player_dice = Dice.Dice(screen, 
-                    "Pygame_101/dice1.png",
-                    "Pygame_101/dice2.png",
-                    "Pygame_101/dice3.png",
-                    "Pygame_101/dice4.png",
-                    "Pygame_101/dice5.png",
-                    "Pygame_101/dice6.png",
-                    "Pygame_101/dice_rolling.png",
+                    "dice1.png",
+                    "dice2.png",
+                    "dice3.png",
+                    "dice4.png",
+                    "dice5.png",
+                    "dice6.png",
+                    "dice_rolling.png",
                     (220, 700),
                     (70, 70))
 
 
 bot_dice = Dice.Dice(screen, 
-                    "Pygame_101/dice1.png",
-                    "Pygame_101/dice2.png",
-                    "Pygame_101/dice3.png",
-                    "Pygame_101/dice4.png",
-                    "Pygame_101/dice5.png",
-                    "Pygame_101/dice6.png",
-                    "Pygame_101/dice_rolling.png",
+                    "dice1.png",
+                    "dice2.png",
+                    "dice3.png",
+                    "dice4.png",
+                    "dice5.png",
+                    "dice6.png",
+                    "dice_rolling.png",
                     (420, 700),
                     (70, 70))
 
@@ -119,28 +119,28 @@ bot = Action.Character(screen,
                     grid,
                     obstacle,
                     bot_dice,
-                    "Pygame_101/bot-still.png",
-                    "Pygame_101/bot-walk1.png",
-                    "Pygame_101/bot-walk2.png",
-                    "Pygame_101/bot-climb1.png",
-                    "Pygame_101/bot-climb2.png",
-                    "Pygame_101/bot-eaten.png",
-                    "Pygame_101/bot-stuck.png",
-                    "Pygame_101/bot-slip.png")
+                    "bot-still.png",
+                    "bot-walk1.png",
+                    "bot-walk2.png",
+                    "bot-climb1.png",
+                    "bot-climb2.png",
+                    "bot-eaten.png",
+                    "bot-stuck.png",
+                    "bot-slip.png")
 
 
 player = Action.Character(screen,
                     grid,
                     obstacle,
                     player_dice,
-                    "Pygame_101/player-still.png",
-                    "Pygame_101/player-walk1.png",
-                    "Pygame_101/player-walk2.png",
-                    "Pygame_101/player-climb1.png",
-                    "Pygame_101/player-climb2.png",
-                    "Pygame_101/player-eaten.png",
-                    "Pygame_101/player-stuck.png",
-                    "Pygame_101/player-slip.png")
+                    "player-still.png",
+                    "player-walk1.png",
+                    "player-walk2.png",
+                    "player-climb1.png",
+                    "player-climb2.png",
+                    "player-eaten.png",
+                    "player-stuck.png",
+                    "player-slip.png")
 
 
 
@@ -151,11 +151,11 @@ turn_added = True
 game_ended = False
 
 # game sound effect.
-roll_dice_sound = pygame.mixer.Sound("Pygame_101/roll_dice_sound.mp3")
-eaten_up_sound = pygame.mixer.Sound("Pygame_101/eaten_up.mp3")
-climbing_sound = pygame.mixer.Sound("Pygame_101/ladder.mp3")
-slipping_sound = pygame.mixer.Sound("Pygame_101/slip.mp3")
-stucking_sound = pygame.mixer.Sound("Pygame_101/Fall.mp3")
+roll_dice_sound = pygame.mixer.Sound(BASE / "roll_dice_sound.mp3")
+eaten_up_sound = pygame.mixer.Sound(BASE / "eaten_up.mp3")
+climbing_sound = pygame.mixer.Sound(BASE / "ladder.mp3")
+slipping_sound = pygame.mixer.Sound(BASE / "slip.mp3")
+stucking_sound = pygame.mixer.Sound(BASE / "Fall.mp3")
 
 
 eaten_up_sound_played = True
@@ -172,16 +172,16 @@ player_turn_text = SimpleText.SimpleText(screen, (10, 725), "Your turn [SPACE] -
 music_num = random.randint(1, 4)
 
 if music_num == 1:
-    pygame.mixer.music.load("Pygame_101/Music g1.mp3")
+    pygame.mixer.music.load(BASE / "Music g1.mp3")
 elif music_num == 2:
-    pygame.mixer.music.load("Pygame_101/Music g2.mp3")
+    pygame.mixer.music.load(BASE / "Music g2.mp3")
 elif music_num == 3:
-    pygame.mixer.music.load("Pygame_101/Music g3.mp3")
+    pygame.mixer.music.load(BASE / "Music g3.mp3")
 elif music_num == 4:
-    pygame.mixer.music.load("Pygame_101/Music g4.mp3")
+    pygame.mixer.music.load(BASE / "Music g4.mp3")
 
 pygame.mixer.music.play(-1)
-pygame.mixer.music.set_volume(0.2)
+pygame.mixer.music.set_volume(0.4)
 
 
 # difficulty
@@ -198,8 +198,8 @@ while True:
     obstacle.spawn_ladder(15)
     obstacle.spawn_snake(60)
 
-    player.update_game()
     bot.update_game()
+    player.update_game()
 
 
     for event in pygame.event.get():
