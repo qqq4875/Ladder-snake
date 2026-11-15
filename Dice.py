@@ -135,18 +135,18 @@ if __name__ == "__main__":
     obstacle = Obstacle.Obstacle(screen, 
                         grid,
                         "Pygame_101/ladder.png",
-                        "Pygame_101/arrow.png",
+                        "Pygame_101/snake.png",
                         "Pygame_101/hole.png",
                         "Pygame_101/ice.jpg")
     
     dice = Dice(screen,
-                    "Pygame_101/1.png",
-                    "Pygame_101/2.png",
-                    "Pygame_101/3.png",
-                    "Pygame_101/4.png",
-                    "Pygame_101/5.webp",
-                    "Pygame_101/6.png",
-                    "Pygame_101/7.png",
+                    "Pygame_101/dice1.png",
+                    "Pygame_101/dice2.png",
+                    "Pygame_101/dice3.png",
+                    "Pygame_101/dice4.png",
+                    "Pygame_101/dice5.png",
+                    "Pygame_101/dice6.png",
+                    "Pygame_101/dice_rolling.png",
                     (200, 200),
                     (50, 50))
 
@@ -156,15 +156,7 @@ if __name__ == "__main__":
         screen.fill("black")
 
         
-        
 
-        #player.spawn_player()
-        #player.move()
-        #if not player.stucking:
-            #pass # Roll the dice
-        
-        #else:
-            #pass
 
         #print(pygame.time.get_ticks())
 
@@ -172,6 +164,7 @@ if __name__ == "__main__":
         dice.update_dice_image()
         dice.draw_dice()
         print(dice.step)
+        print()
 
 
         for event in pygame.event.get():
@@ -181,7 +174,7 @@ if __name__ == "__main__":
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    dice.role_dice()
+                    dice.roll_dice()
 
         pygame.display.update()
         clock.tick(60)

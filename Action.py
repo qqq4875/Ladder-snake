@@ -41,7 +41,7 @@ class Action:
         self.stucking = False
         self.slipping = False
         self.slip_found = False
-        self.end_turn = True # <<<----
+        self.end_turn = True
         self.step_added = True
         self.win = False
         self.current_action_index = 0
@@ -211,8 +211,8 @@ class Action:
                     self.init_pos_y = self.tar_pos_y
 
                 else:
-                    self.cur_pos_x += (self.tar_pos_x - self.init_pos_x) / (self.grid.grid_size * 2) # Have to be divisible by grid_size
-                    self.cur_pos_y += (self.tar_pos_y - self.init_pos_y) / (self.grid.grid_size * 2) # Have to be divisible by grid_size
+                    self.cur_pos_x += (self.tar_pos_x - self.init_pos_x) / (self.grid.grid_size * 4) # Have to be divisible by grid_size
+                    self.cur_pos_y += (self.tar_pos_y - self.init_pos_y) / (self.grid.grid_size * 4) # Have to be divisible by grid_size
 
             elif self.eaten_up:
 
@@ -261,12 +261,6 @@ class Action:
 
 
         self.display.blit(self.action_image, (self.cur_pos_x, self.cur_pos_y))
-
-
-    def forward(self, step):
-        
-        self.tar_pos += step
-        self.step_added = True
         
 
 
@@ -274,7 +268,6 @@ class Action:
     def roll_dice(self):
         
         self.walked = False
-        self.end_turn = False
         self.step_added = False
         self.dice.roll_dice()
 
@@ -282,7 +275,9 @@ class Action:
     def check_dice(self):
 
         if self.dice.dice_rolled and not self.step_added:
-            self.forward(self.dice.step)
+            #self.forward(self.dice.step)
+            self.tar_pos += self.dice.step
+            self.step_added = True
 
     
 
@@ -302,7 +297,7 @@ class Action:
 
 
 
-class Player(Action):
+class Character(Action):
     
     def __init__(self,
                  display, 
@@ -331,9 +326,13 @@ class Player(Action):
                          image_slip)
         
 
-    def spawn_player(self):
+    def update_game(self):
 
-        self.display.blit(self.still, (self.cur_pos_x, self.cur_pos_y))
+        self.dice.update_dice_image()
+        self.dice.draw_dice()
+        self.move()
+        self.check_dice()
+
 
         
 
@@ -366,7 +365,7 @@ if __name__ == "__main__":
     obstacle = Obstacle.Obstacle(screen, 
                         grid,
                         "Pygame_101/ladder.png",
-                        "Pygame_101/arrow.png",
+                        "Pygame_101/snake.png",
                         "Pygame_101/hole.png",
                         "Pygame_101/ice.jpg")
     
@@ -394,32 +393,32 @@ if __name__ == "__main__":
                     (70, 70))
 
     
-    player = Player(screen,
+    player = Character(screen,
                     grid,
                     obstacle,
                     player_dice,
-                    "Pygame_101/still.png",
-                    "Pygame_101/walk1.png",
-                    "Pygame_101/walk2.png",
-                    "Pygame_101/climb1.png",
-                    "Pygame_101/climb2.png",
-                    "Pygame_101/eaten.png",
-                    "Pygame_101/stuck.png",
-                    "Pygame_101/slip.png")
+                    "Pygame_101/player-still.png",
+                    "Pygame_101/player-walk1.png",
+                    "Pygame_101/player-walk2.png",
+                    "Pygame_101/player-climb1.png",
+                    "Pygame_101/player-climb2.png",
+                    "Pygame_101/player-eaten.png",
+                    "Pygame_101/player-stuck.png",
+                    "Pygame_101/player-slip.png")
     
 
-    bot = Player(screen,
+    bot = Character(screen,
                     grid,
                     obstacle,
                     bot_dice,
-                    "Pygame_101/still.png",
-                    "Pygame_101/walk1.png",
-                    "Pygame_101/walk2.png",
-                    "Pygame_101/climb1.png",
-                    "Pygame_101/climb2.png",
-                    "Pygame_101/eaten.png",
-                    "Pygame_101/stuck.png",
-                    "Pygame_101/slip.png")
+                    "Pygame_101/bot-still.png",
+                    "Pygame_101/bot-walk1.png",
+                    "Pygame_101/bot-walk2.png",
+                    "Pygame_101/bot-climb1.png",
+                    "Pygame_101/bot-climb2.png",
+                    "Pygame_101/bot-eaten.png",
+                    "Pygame_101/bot-stuck.png",
+                    "Pygame_101/bot-slip.png")
     
     
     
@@ -434,24 +433,6 @@ if __name__ == "__main__":
 
     game_ended = False
 
-    roll_dice_sound = pygame.mixer.Sound("Pygame_101/roll_dice_sound.mp3")
-    eaten_up_sound = pygame.mixer.Sound("Pygame_101/eaten_up.mp3")
-
-    sound_played = True
-
-    music_num = random.randint(1, 4)
-    if music_num == 1:
-        pygame.mixer.music.load("Pygame_101/Music g1.mp3")
-    elif music_num == 2:
-        pygame.mixer.music.load("Pygame_101/Music g2.mp3")
-    elif music_num == 3:
-        pygame.mixer.music.load("Pygame_101/Music g3.mp3")
-    elif music_num == 4:
-        pygame.mixer.music.load("Pygame_101/Music g4.mp3")
-
-    pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(0.25)
-
     while True:
         
         screen.fill("black")
@@ -462,17 +443,8 @@ if __name__ == "__main__":
         obstacle.spawn_ladder()
         obstacle.spawn_snake()
 
-        player_dice.update_dice_image()
-        bot_dice.update_dice_image()
-
-        player_dice.draw_dice()
-        bot_dice.draw_dice()
-
-        player.move()
-        bot.move()
-        
-        player.check_dice()
-        bot.check_dice()
+        player.update_game()
+        bot.update_game()
 
 
         for event in pygame.event.get():
@@ -483,15 +455,10 @@ if __name__ == "__main__":
             if event.type == pygame.KEYDOWN:
                 if not game_ended and event.key == pygame.K_SPACE and player.end_turn and not player.stucking and turn % 2 == 1 and player.dice.dice_rolled and player.walked and not bot.slipping and not bot.climbing and not bot.eaten_up:
                     player.roll_dice()
-                    roll_dice_sound.play()
                     turn_added = False
-
-                #if event.key == pygame.K_e: # <<<-----
-                #    player.end_turn = True
 
         if not game_ended and bot.end_turn and not bot.stucking and turn % 2 == 0 and bot.dice.dice_rolled and bot.walked and not player.slipping  and not player.climbing and not player.eaten_up:
             bot.roll_dice()
-            roll_dice_sound.play()
             turn_added = False
 
         if player.stucking and bot.walked and turn % 2 == 1 and not bot.slipping and not bot.climbing and not bot.eaten_up:
@@ -513,13 +480,6 @@ if __name__ == "__main__":
             if turn_added:
                 turn += 1
 
-        if (player.eaten_up or bot.eaten_up) and sound_played:
-            eaten_up_sound.play()
-            sound_played = False
-
-        elif not player.eaten_up and not bot.eaten_up and not player.climbing and not bot.climbing and not player.slipping and not bot.slipping:
-            sound_played = True
-
         if player.win:
             winner = "Player"
             game_ended = True
@@ -530,9 +490,6 @@ if __name__ == "__main__":
 
         if game_ended:
             print(f"{winner} win!!")
-        
-        #print("current player position", player.cur_pos)
-        #print("current bot position", bot.cur_pos)
 
 
         pygame.display.update()

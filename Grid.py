@@ -7,15 +7,9 @@ class Grid:
         self.left_margin = starting_point[0]
         self.top_margin = starting_point[1]
 
+    # Draw square grids
     def drawGrid(self, width=1, grid_color=[255, 255, 255], num_color=[255, 255, 255], num_size=30):
 
-        # Draw square grids
-
-        # Default display width = 600
-        # Default display height = 600
-
-        # Grid's length doesn't change on display width nor height
-        # Grid's default position always start at (0, 0)
 
         order = 1
         Grid_counter = 1
@@ -86,9 +80,9 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode((Screen_Width, Screen_Height))
     clock = pygame.time.Clock()
 
-    grid_hold = pygame.Surface((600, 650))
+    grid_hold = pygame.Surface((600, 640))
 
-    grid = Grid(grid_hold, 60, (0, 50))
+    grid = Grid(grid_hold, 60, (0, 40))
     grid.drawGrid()
 
 

@@ -69,7 +69,7 @@ class Obstacle:
     
     def Hole(self, amount=0):
 
-        self.hole_pos.clear # Set clear if recalled.
+        self.hole_pos.clear() # Set clear if recalled.
 
         for time in range(amount):
 
@@ -221,7 +221,7 @@ if __name__ == "__main__":
     obstacle = Obstacle(screen,
                         grid,
                         "Pygame_101/ladder.png",
-                        "Pygame_101/arrow.png",
+                        "Pygame_101/snake.png",
                         "Pygame_101/hole.png",
                         "Pygame_101/ice.jpg")
 
